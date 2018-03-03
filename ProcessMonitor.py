@@ -4,9 +4,6 @@
 ## Process Monitor Script
 
 ##### Import Libraries
-
-# In[83]:
-
 import time
 import os
 import os.path
@@ -17,6 +14,8 @@ class ProcessMonitor:
         self.process_dict={}
         self.processdict_last={}
         #print ("{},{},{},{}".format(self.process_dict,self.processdict_last,self.log_address,self.swapfile))
+
+
 #Log Rotation Method
     def log_rotation(self,log_maxsize=9999999999):
         log_size= os.stat(self.log_address).st_size
@@ -24,6 +23,8 @@ class ProcessMonitor:
         if ( 300 <= int(now) and int(now) < 305 or log_size > log_maxsize):
             with open(log_address,'w') as log_file:
                 log_file.write("")
+
+
 #Process List Section
     def process_list_now(self):
         lines=[]
@@ -39,6 +40,8 @@ class ProcessMonitor:
                 if(len(lines)>2):
                     process_dict.update({lines[1]:{'USER':lines[0],'CMD':lines[2]}})
         self.process_dict=process_dict
+
+
 #Process List For Last Check
     def process_list_last(self):
         lines=[]
@@ -84,8 +87,6 @@ class ProcessMonitor:
                 f.close()
 
 
-# In[84]:
-
 log_file='/var/log/prc_br.log'
 swapfile="/root/text.txt"
 monitorobj=ProcessMonitor(log_file,swapfile)
@@ -97,9 +98,5 @@ while True:
     monitorobj.log_rotation()
     time.sleep(5)
     #print("Logging!!!")
-
-
-# In[ ]:
-
 
 
