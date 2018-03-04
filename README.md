@@ -4,6 +4,8 @@
 
 This script help us for logging created or killed process.Its my experience for our servers
 
+You Can Logging Process Into File or Local Syslog or Directly Send to Syslog Server.
+
 ### Requirements
 
 - Python3
