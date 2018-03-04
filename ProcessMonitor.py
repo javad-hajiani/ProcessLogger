@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 ## Process Monitor Script
@@ -7,14 +6,17 @@
 import time
 import os
 import os.path
+import syslogclient
+#Process Monitoring Class
 class ProcessMonitor:
-    def __init__(self,log_address,swapfile):
+    def __init__(self,log_address,swapfile,ip="0",port=514):
+        self.ip=ip
+        self.port=port
         self.log_address=log_address
         self.swapfile=swapfile
         self.process_dict={}
         self.processdict_last={}
         #print ("{},{},{},{}".format(self.process_dict,self.processdict_last,self.log_address,self.swapfile))
-
 
 #Log Rotation Method
     def log_rotation(self,log_maxsize=9999999999):
@@ -65,15 +67,16 @@ class ProcessMonitor:
 
 #Check PIDs For New Ones or Deletes
     def check_pid(self):
+        logger=syslogclient.LoggingClass(self.ip,self.port)
         set_now=set(self.process_dict.keys())
         set_last=set(self.processdict_last.keys())
         items_created=[x for x in self.process_dict.keys() if x not in set_last]
         exepted_cmd=['/bin/sh','sleep','bash','awk','ps','python3.6','-bash']
-        local_time= time.asctime(time.localtime(time.time()))
         for i in items_created:
             new_cmd = self.process_dict[i]['CMD']
             if (new_cmd not in exepted_cmd):
-                experssion="{}|BR_ProcAnalyzer|Created|{}|{}|{}".format(local_time,self.process_dict[i]['USER'],self.process_dict[i]['CMD'],i)
+                experssion="Created|{}|{}|{}".format(self.process_dict[i]['USER'],self.process_dict[i]['CMD'],i)
+                logger.Send(experssion)
                 f=open(self.log_address,"a+")
                 f.write("\n" + experssion)
                 f.close()
@@ -81,10 +84,8 @@ class ProcessMonitor:
         for i in items_closed:
             new_cmd = self.processdict_last[i]['CMD']
             if (new_cmd not in exepted_cmd):
-                experssion="{}|BR_ProcAnalyzer|Closed|{}|{}|{}".format(local_time,self.processdict_last[i]['USER'],self.processdict_last[i]['CMD'],i)
-                f=open(self.log_address,"a+")
-                f.write("\n" + experssion)
-                f.close()
+                experssion="Closed|{}|{}|{}".format(self.processdict_last[i]['USER'],self.processdict_last[i]['CMD'],i)
+                logger.Send(experssion)
 
 
 log_file='/var/log/prc_br.log'
@@ -98,5 +99,4 @@ while True:
     monitorobj.log_rotation()
     time.sleep(5)
     #print("Logging!!!")
-
 
