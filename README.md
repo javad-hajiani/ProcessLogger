@@ -20,6 +20,6 @@ You Can Logging Process Into File or Local Syslog or Directly Send to Syslog Ser
 
 ##### Run Script on startup
 - RC.Local
- - > sudo echo "python3 /path/to/file" >> /etc/rc.local
+ - > sudo echo "python3 /path/to/main.py" >> /etc/rc.local
 - crontab -e
- - > @reboot /usr/bin/python3 /path/to/file 
+ - > @reboot /usr/bin/python3 /path/to/main.py 

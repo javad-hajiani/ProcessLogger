@@ -1,11 +1,4 @@
-# coding: utf-8
-
-## Process Monitor Script
-
-##### Import Libraries
-import time
 import os
-import os.path
 import syslogclient
 #Process Monitoring Class
 class ProcessMonitor:
@@ -71,11 +64,11 @@ class ProcessMonitor:
         set_now=set(self.process_dict.keys())
         set_last=set(self.processdict_last.keys())
         items_created=[x for x in self.process_dict.keys() if x not in set_last]
-        exepted_cmd=['/bin/sh','sleep','bash','awk','ps','python3.6','-bash']
+        exepted_cmd=['/bin/sh','sleep','bash','awk','ps','python3.6','-bash','sh']
         for i in items_created:
             new_cmd = self.process_dict[i]['CMD']
             if (new_cmd not in exepted_cmd):
-                experssion="Created|{}|{}|{}".format(self.process_dict[i]['USER'],self.process_dict[i]['CMD'],i)
+                experssion="ProcessCreated|{}|{}|{}".format(self.process_dict[i]['USER'],self.process_dict[i]['CMD'],i)
                 logger.Send(experssion)
                 f=open(self.log_address,"a+")
                 f.write("\n" + experssion)
@@ -84,19 +77,6 @@ class ProcessMonitor:
         for i in items_closed:
             new_cmd = self.processdict_last[i]['CMD']
             if (new_cmd not in exepted_cmd):
-                experssion="Closed|{}|{}|{}".format(self.processdict_last[i]['USER'],self.processdict_last[i]['CMD'],i)
+                experssion="ProcessClosed|{}|{}|{}".format(self.processdict_last[i]['USER'],self.processdict_last[i]['CMD'],i)
                 logger.Send(experssion)
-
-
-log_file='/var/log/prc_br.log'
-swapfile="/root/text.txt"
-monitorobj=ProcessMonitor(log_file,swapfile)
-while True:
-    monitorobj.process_list_last()
-    monitorobj.process_list_now()
-    monitorobj.check_pid()
-    #log rotation run once per hour,but you can set with maximum log file size
-    monitorobj.log_rotation()
-    time.sleep(5)
-    #print("Logging!!!")
 
