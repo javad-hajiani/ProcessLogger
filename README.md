@@ -1,8 +1,8 @@
-# ProcessLogger
+# pmonitor ProcessLogger
 
 ## Getting Started
 
-This script help us for logging created or killed process.Its my experience for our servers
+This script help us for logging created or killed process and ports.Its my experience for our servers
 
 You Can Logging Process Into File or Local Syslog or Directly Send to Syslog Server.
 
@@ -18,8 +18,20 @@ You Can Logging Process Into File or Local Syslog or Directly Send to Syslog Ser
 
 ### Configuration
 
-##### Run Script on startup
-- RC.Local
- - > sudo echo "python3 /path/to/main.py" >> /etc/rc.local
+##### Run Script to install Python package
+- Service Base
+ - Run With root Permission > sudo /path/to/run.sh
 - crontab -e
- - > @reboot /usr/bin/python3 /path/to/main.py 
+ - Run With root Permission > @reboot /usr/bin/python3 /path/to/main 
+
+##### Start pmonitor Service
+- Service Command
+ - > sudo service pmonitor start
+- INIT File
+ - > sudo /etc/init.d/pmonitor start
+
+##### Run as Startup
+- update-rc.d
+ - > sudo update-rc.d pmonitor enable
+- chkconfig
+ - > sudo chkconfig pmonitor on
