@@ -69,9 +69,6 @@ class PortMonitor:
             if (i not in exepted_Ports):
                 experssion="{}|PortListened|{}|{}|{}|{}".format(self.Port_dict[i]['CMD'],self.Port_dict[i]['listen'],self.Port_dict[i]['pid'],self.Port_dict[i]['proto'],i)
                 logger.Send(experssion)
-                f=open(self.log_address,"a+")
-                f.write("\n" + experssion)
-                f.close()
         items_closed=[x for x in self.Portdict_last.keys() if x not in set_now]
         for i in items_closed:
             if (i not in exepted_Ports):

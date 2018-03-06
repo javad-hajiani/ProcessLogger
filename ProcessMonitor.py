@@ -70,9 +70,6 @@ class ProcessMonitor:
             if (new_cmd not in exepted_cmd):
                 experssion="ProcessCreated|{}|{}|{}".format(self.process_dict[i]['USER'],self.process_dict[i]['CMD'],i)
                 logger.Send(experssion)
-                f=open(self.log_address,"a+")
-                f.write("\n" + experssion)
-                f.close()
         items_closed=[x for x in self.processdict_last.keys() if x not in set_now]
         for i in items_closed:
             new_cmd = self.processdict_last[i]['CMD']
